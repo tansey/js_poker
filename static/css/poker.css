@@ -1,0 +1,243 @@
+.poker-table {
+    background-image: url('../images/poker_table.png');
+    background-repeat: no-repeat;
+    width: 745px;
+    height: 411px;
+}
+
+.seat {
+    width:150px;
+    height:150px;
+    position: absolute;
+}
+
+#button {
+    background-image: url('../images/dealerbutton.png');
+    background-repeat: no-repeat;
+    background-size: 100%;
+    width:24px;
+    height:19px;
+    position: absolute;
+}
+
+.name-chips {
+    width:140px;
+    height:33px;
+    background-color:gray;
+    font-size: 14px;
+    color:white;
+    text-align: center;
+    top:50px;
+    position:absolute;
+    border-radius: 2px;
+}
+
+.player-name {
+    width:100%;
+}
+
+.chips {
+}
+
+.card {
+    width:50px;
+    height:73px;
+    background-image: url('../images/back.png');
+    background-size: 100%;
+}
+
+.holecards {
+    width:102px;
+    height:73px;
+    float:left;
+    position:absolute;
+    left:20;
+    top:0;
+}
+
+.holecard1 {
+    position:absolute;
+    left:0;
+    top:0;
+}
+
+.holecard2 {
+    position:absolute;
+    left:50px;
+    top:0;
+}
+
+
+
+.bet {
+    font-size: 12px;
+    color:white;
+    position: absolute;
+    left:0;
+    top:0;
+}
+
+#seat1 {
+    left:500px;
+    top:10px;
+}
+.seat1-button {
+    left:505px;
+    top:80px;
+}
+#seat1 .bet {
+    left:30px;
+    top:125px;
+}
+
+#seat2 {
+    left:650px;
+    top:165px;
+}
+.seat2-button {
+    left:655px;
+    top:215px;
+}
+#seat2 .bet {
+    left:-50px;
+    top:75px;
+}
+
+#seat3 {
+    left:500px;
+    top:340px;
+}
+.seat3-button {
+    left:495px;
+    top:325px;
+}
+#seat3 .bet {
+    left:30px;
+    top:-20px;
+}
+
+#seat4 {
+    left:150px;
+    top:340px;
+}
+.seat4-button {
+    left:145px;
+    top:325px;
+}
+#seat4 .bet {
+    left:80px;
+    top:-20px;
+}
+
+#seat5 {
+    left:0px;
+    top:165px;
+}
+.seat5-button {
+    left:125px;
+    top:215px;
+}
+#seat5 .bet {
+    left:155px;
+    top:75px;
+}
+
+#seat6 {
+    left:150px;
+    top:10px;
+}
+.seat6-button {
+    left:275px;
+    top:80px;
+}
+#seat6 .bet {
+    left:80px;
+    top:125px;
+}
+
+#board {
+    position:absolute;
+    left:250px;
+    top:168px;
+}
+
+#pot {
+    position: absolute;
+    left:325;
+    top:245px;
+    font-size: 12px;
+    color:white;
+}
+
+.boardcard {
+    width:50px;
+    height:73px;
+    position: absolute;
+    left:0;
+    top:0;
+}
+
+#flop1 {
+}
+
+#flop2 {
+    left:52px;
+}
+
+#flop3 {
+    left:104px;
+}
+
+#turn {
+    left:156px;
+}
+
+#river {
+    left:208px;
+}
+
+#action-options {
+    width:500px;
+    height:200px;
+    position: absolute;
+    left:400px;
+    top:500px;
+}
+
+.action-button {
+    background-color: gray;
+    position: absolute;
+    color: white;
+    border-radius: 2px;
+    height:30px;
+    padding: 10px 5px 0 5px;
+    font-size: 18px;
+    left:0;
+    top:0;
+    cursor: pointer;
+}
+
+#fold-button {
+
+}
+
+#call-button {
+    left:80px;
+}
+
+#raise-button {
+    left:200px;
+}
+
+#history {
+    position:absolute;
+    width:400px;
+    height:600;
+    border-color: black;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 2px;
+    font-size: 10px;
+    left:800px;
+    top:5px;
+}
