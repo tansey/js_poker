@@ -217,6 +217,27 @@
     cursor: pointer;
 }
 
+#game-timer {
+    position: absolute;
+    color: black;
+    border-radius: 1px;
+    height:30px;
+    font-size: 12px;
+    text-align: center;
+    width:90px;
+    left:350px;
+    top:425px;
+}
+
+.timer-normal {
+    background-color: #FFFF99;
+}
+
+
+.timer-warning {
+    background-color: #FF0000;
+}
+
 #fold-button {
 
 }

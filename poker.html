@@ -3,10 +3,12 @@
     <title>Wesley's Poker Game</title>
     <link rel="stylesheet" href="static/css/poker.css" type="text/css">
     <script type="text/javascript" src="static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="static/js/jquery.timers.min.js"></script>
     <script type="text/javascript" src="static/js/poker.js"></script>
+    <script type="text/javascript" src="static/js/prettyprint.js"></script>
 </head>
 <body>
-    <div id="poker_table" class="poker-table">
+    <div id="poker_table" class="poker-table" data-uid="">
         <div id="seat1" class="seat">
             <div class="holecards">
                 <div class="card holecard1"></div>
@@ -85,6 +87,7 @@
         </div>
     </div>
     <div id="button" class="seat6-button"></div>
+    <div id="game-timer" class="timer-normal">29 seconds remaining.</div>
     <div id="history"></div>
     <div id="action-options">
         <div id="fold-button" class="action-button">Fold</div>
