@@ -247,26 +247,18 @@ testhand = {
 function catchUp(){
     var round = testhand['PokerHand']['Rounds'].length - 1;
 
-    setFlop(testhand['PokerHand']['Rounds'][1]['CommunityCards']);
-    setTurn(testhand['PokerHand']['Rounds'][2]['CommunityCards']);
-    setRiver(testhand['PokerHand']['Rounds'][3]['CommunityCards']);
+    setBoard(testhand);
     setHeroCards(testhand);
+    setOpponentCards(testhand);
     setPlayerNames(testhand);
+    setPlayerStacks(testhand);
+    setPots(testhand);
 
     curActions = testhand['PokerHand']['Rounds'][round]['Actions'];
-    curBets = [0,0,0,0,0,0];
-    for (var i = 0; i < curActions.length; i++){
-        var amt = curActions[i]['Amount'];
-        if (amt != null){
-            var seat = findSeatNumber(curActions[i]['Player'], testhand);
-            curBets[seat] += amt;
-        }
-    }
+    curBets = [0,0,0,0,0,0,0];
+    addCommittedAmounts(curActions, curBets, testhand);
     for (var i = 0; i < curBets.length; i++)
-        if(curBets[i] > 0)
-            setBet(curBets[i], i+1);
-        else
-            setBet(null,i+1);
+        setBet(curBets[i], i+1);
 
     moveButton(targetSeat + 1);
     targetSeat = (targetSeat + 1) % 6;
@@ -332,12 +324,48 @@ function hideTimer() {
 function setPlayerNames(hand){
     players = hand['PokerHand']['Players'];
     for(var i = 0; i < players.length; i++)
-        setPlayerName(players[i]['Name'], players[i]['Seat']);
+        setPlayerName(players[i]['Name'], parseInt(players[i]['Seat']));
 }
 
 function setPlayerName(name, seat){
     var namediv = $('#seat' + seat).children('.name-chips').children('.player-name');
     namediv.text(name);
+}
+
+function setPlayerStacks(hand){
+    committed = [0,0,0,0,0,0,0];
+    blinds = hand['PokerHand']['Blinds'];
+    addCommittedAmounts(blinds, committed, hand);
+
+    var rounds = hand['PokerHand']['Rounds'];
+    for (var i = 0; i < rounds.length; i++)
+        addCommittedAmounts(rounds[i], committed, hand);
+
+    players = hand['PokerHand']['Players'];
+    for(var i = 0; i < players.length; i++){
+        stack = parseFloat(players[i]['Stack']);
+        seat = parseInt(players[i]['Seat']);
+        setPlayerStack(stack - committed[seat], seat);
+    }
+}
+
+function setPlayerStack(amount, seat){
+    chipsdiv = $('#seat' + seat).children('.name-chips').children('.chips');
+    if(amount == null)
+        chipsdiv.text("");
+    else
+        chipsdiv.text("$" + amount);
+}
+
+function addCommittedAmounts(actions, committed, hand){
+    for(var aidx = 0; aidx < actions.length; aidx++){
+        var amt = actions[aidx]['Amount'];
+        if(amt == null)
+            continue;
+        amt = parseFloat(amt);
+        seat = findSeatNumber(actions[aidx]['Player'], hand);
+        committed[seat] += amt;
+    }
 }
 
 function getCardSrc(rank, suit) {
@@ -370,11 +398,23 @@ function setHeroCards(hand) {
     setHoleCards(hc, seat);
 }
 
+function setOpponentCards(hand){
+    results = hand['PokerHand']['Results'];
+    if (results == null)
+        return;
+    for (var i = 0; i < results.length; i++){
+        hc = results[i]['HoleCards'];
+        if (hc == null)
+            continue;
+        setHoleCards(hc, findSeatNumber(results[i]['Player'], hand));
+    }
+}
+
 function findSeatNumber(player, hand){
     seats = hand['PokerHand']['Players']
     for (var i = 0; i < seats.length; i++){
         if (seats[i]['Name'] == player)
-            return seats[i]['Seat']
+            return parseInt(seats[i]['Seat'])
     }
     return -1;
 }
@@ -386,6 +426,19 @@ function setHoleCards(hc, seat){
 
     setCard(card1, hc[0]);
     setCard(card2, hc[1]);
+}
+
+function setBoard(hand){
+    var round = testhand['PokerHand']['Rounds'].length - 1;
+    if (round >= 1){
+        setFlop(testhand['PokerHand']['Rounds'][1]['CommunityCards']);
+        if(round >= 2){
+            setTurn(testhand['PokerHand']['Rounds'][2]['CommunityCards']);
+            if(round >= 3){
+                setRiver(testhand['PokerHand']['Rounds'][3]['CommunityCards']);
+            }
+        }         
+    }
 }
 
 function setFlop(flop) {
@@ -408,10 +461,55 @@ function setCard(div, card){
 
 function setBet(bet, seat){
     var betdiv = $('#seat' + seat).children('.bet');
-    if (bet == null)
+    if (bet == null || bet == 0)
         betdiv.text('');
     else
         betdiv.text('$' + bet);
+}
+
+function setPots(hand){
+    // TODO: Handle side pots on all-ins
+    var curPot = 0.0;
+    var totalPot = 0.0;
+    blinds = hand['PokerHand']['Blinds'];
+    round = hand['PokerHand']['Rounds'].length - 1;
+    for(var i = 0; i < blinds.length; i++){
+        var amt = blinds[i]['Amount'];
+        if (amt == null)
+            continue;
+        amt = parseFloat(amt);
+        totalPot += amt;
+        if (round > 0)
+            curPot += amt;
+    }
+
+    var rounds = hand['PokerHand']['Rounds'];
+    for (var i = 0; i < rounds.length; i++){
+        actions = rounds[i]['Actions'];
+        for (var j = 0; j < actions.length; j++){
+            var amt = actions[j]['Amount'];
+            if (amt == null)
+                continue;
+            amt = parseFloat(amt);
+            totalPot += amt;
+            if (round > i)
+                curPot += amt;
+        }
+    }
+
+    setCurrentPot(curPot);
+    setTotalPot(totalPot);
+}
+
+function setTotalPot(amount){
+    $('#total-pot').text('Total pot: $' + amount.toFixed(2));
+}
+
+function setCurrentPot(amount){
+    if(amount == 0)
+        $('#current-pot').text("");
+    else
+        $('#current-pot').text('$' + amount.toFixed(2));
 }
 
 function getChipSrc(chipValue){
